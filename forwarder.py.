@@ -1,0 +1,16 @@
+from telethon import TelegramClient, events
+import os
+
+api_id = int(os.environ.get('API_ID'))
+api_hash = os.environ.get('API_HASH')
+origin_chat = os.environ.get('ORIGIN_CHAT')  # puede ser @usuario o ID
+destination_chat = os.environ.get('DESTINATION_CHAT')  # puede ser @usuario o ID
+
+client = TelegramClient('session', api_id, api_hash)
+
+@client.on(events.NewMessage(chats=origin_chat))
+async def handler(event):
+    await client.send_message(destination_chat, event.message)
+
+client.start()
+client.run_until_disconnected()
